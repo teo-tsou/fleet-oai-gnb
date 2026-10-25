@@ -10,16 +10,17 @@ edge app in a user cluster. The chart is OAI's own (`charts/`, from the OAI Helm
 - The **5G core** is free5GC (`fleet-free5gc-control`), reached through the IntEdge **`amf` binding**
   (`amf.upstream.svc.cluster.local`), as in `fleet-ueransim`. PLMN 208/93, TAC 1, slice SST 1 / SD 010203.
 
-## The image (air-gapped sites)
+## The image
 OAI's image downloads the B210 firmware from the internet at every start. `image/Dockerfile` bakes it in (UHD's own
 downloader at build time, checked against UHD's manifest) on top of `oaisoftwarealliance/oai-gnb:2026.w43` pinned by
-digest. Build it on a workstation or CI machine, never on a hub machine, and push it to the hub registry:
+digest. The **`image` workflow** builds it on every change under `image/` and publishes it on GHCR as
+`ghcr.io/teo-tsou/oai-gnb-b210` (with an SBOM and build provenance); its log prints the digest to put in
+`nfimage.digest`. After the first run, make the package **public** (GitHub, Packages, oai-gnb-b210, Package settings)
+or give the clusters a pull secret.
 
-```bash
-docker build -t registry.intedge/intedge/oai-gnb-b210:2026.w43 image/
-docker push registry.intedge/intedge/oai-gnb-b210:2026.w43
-```
-Then set `nfimage.digest` in `values.yaml` to the pushed digest. Without the baked image, set
+How the clusters get it: Fleet on the hub installs the chart into the user cluster; the cluster's own k3s pulls the
+image, asking the hub registry first. Air-gapped sites: the hub mirrors `ghcr.io` like `docker.io`, so put the image
+on the release's image list and the same name is served by the hub. Without the baked image, set
 `radio.firmware: download` and `nfimage.repository: docker.io/oaisoftwarealliance/oai-gnb` (needs internet).
 
 ## Values (values.yaml)

@@ -3,8 +3,9 @@
 # `amf` binding, like fleet-ueransim.
 
 nfimage:
-  # OAI 2026.w43 with the B2xx firmware baked in (image/Dockerfile), served by the hub registry: works air-gapped
-  repository: registry.intedge/intedge/oai-gnb-b210
+  # OAI 2026.w43 with the B2xx firmware baked in (image/Dockerfile), built by this repo's workflow and published on
+  # GHCR. Air-gapped sites: the hub mirrors ghcr.io like docker.io, so the same name is served by the hub registry.
+  repository: ghcr.io/teo-tsou/oai-gnb-b210
   version: "2026.w43"
   digest: ""                        # set to the pushed image's sha256 to pin it
 
