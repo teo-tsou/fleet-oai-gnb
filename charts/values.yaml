@@ -49,6 +49,9 @@ serviceAccount:
 
 multus:
   enabled: false
+  # IntEdge: N2 stays on the pod network (eth0) even when N3 has its own interface: the AMF is reached across
+  # clusters through the platform's `amf` binding, which lives on the pod network.
+  n2OnPodNetwork: false
   interfaces:
     - name: "n2"
       hostInterface: "eth0"

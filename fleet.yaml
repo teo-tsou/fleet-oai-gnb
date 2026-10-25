@@ -1,6 +1,10 @@
 defaultNamespace: oai-gnb
 name: oai-gnb
 
+# N3 is a Multus ipvlan interface: the NetworkAttachmentDefinition type must exist first
+dependsOn:
+  - name: multus-cni
+
 helm:
   chart: charts
   releaseName: oai-gnb

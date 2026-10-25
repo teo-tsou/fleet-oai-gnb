@@ -86,7 +86,7 @@ Resolve N2 interface name
 - Defaults to eth0
 */}}
 {{- define "oai-gnb.n2IfName" -}}
-{{- if not .Values.multus.enabled -}}
+{{- if or (not .Values.multus.enabled) .Values.multus.n2OnPodNetwork -}}
 eth0
 {{- else -}}
   {{- $n2 := "" -}}

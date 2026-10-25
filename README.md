@@ -9,6 +9,9 @@ edge app in a user cluster. The chart is OAI's own (`charts/`, from the OAI Helm
   radio on the site's Devices page and grant it to the tenant, then give the pool that device).
 - The **5G core** is free5GC (`fleet-free5gc-control`), reached through the IntEdge **`amf` binding**
   (`amf.upstream.svc.cluster.local`), as in `fleet-ueransim`. PLMN 208/93, TAC 1, slice SST 1 / SD 010203.
+- **N3** (GTP-U) stays inside this cluster: the UPF (`fleet-free5gc-upf`) runs here with its N3 at `10.100.50.233` on
+  an ipvlan of the node VM's `enp1s0`, and the gNB has its own ipvlan address on that /29, `10.100.50.235`
+  (UERANSIM uses `.234`, `.238` is excluded). N2 stays on the pod network. Needs Multus (`multus-cni`).
 
 ## The image
 OAI's image downloads the B210 firmware from the internet at every start. `image/Dockerfile` bakes it in (UHD's own

@@ -27,6 +27,23 @@ config:
         - sst: 1
           sd: "0x010203"
 
+# N3 (GTP-U to the UPF): the UPF (fleet-free5gc-upf) runs in THIS cluster with its N3 on an ipvlan of the node VM's
+# enp1s0, 10.100.50.233 in 10.100.50.232/29, and the core's SMF hands that address to the gNB at each session. The gNB
+# needs its own address on that /29 (the pod network cannot reach an ipvlan address on its own node, and the UPF sends
+# downlink to the gNB's N3 address). .233 = UPF, .234 = UERANSIM's gNB, .238 = excluded gateway: .235 here.
+# N2 stays on the pod network (the `amf` binding). Needs Multus in the cluster (the app's prerequisite multus-cni).
+multus:
+  enabled: true
+  n2OnPodNetwork: true
+  interfaces:
+    - name: n3
+      enabled: true
+      type: ipvlan
+      mode: l2
+      hostInterface: enp1s0
+      ipAdd: 10.100.50.235
+      netmask: "29"
+
 # the pool that holds the radio
 nodeSelector:
   intedge.io/pool: radio

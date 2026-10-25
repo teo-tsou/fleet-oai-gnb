@@ -13,7 +13,9 @@ charts/config.yaml (the gNB configuration), under OAI's Collaborative Standards 
   - radio.usbAccess: the b2xx container is privileged so it can open the B210 again after it reconnects;
   - nfimage.digest; the init containers' images pinned by digest (images.*); imagePullSecrets empty by default;
   - the ConfigMap declared config.yaml twice (an empty one, then AsConfig's): once now;
-  - config.yaml: sdr_addrs "type=b200" instead of a placeholder serial.
+  - config.yaml: sdr_addrs "type=b200" instead of a placeholder serial;
+  - Multus: an ipvlan NetworkAttachmentDefinition type (upstream: macvlan, vlan), and multus.n2OnPodNetwork, which
+    keeps N2 on eth0 when only N3 has its own interface (upstream falls back to the N3 interface).
 
 The OAI gNB software in the container image is licensed by OAI under terms with patent clauses (OAI Public License
 v1.1, now CSSL v1.0): review them before any commercial or defense deployment.

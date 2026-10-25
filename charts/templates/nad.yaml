@@ -3,6 +3,34 @@
 {{- if .Values.multus.enabled }}
 {{- range .Values.multus.interfaces }}
 {{- if .enabled }}
+{{- if eq .type "ipvlan" }}
+# IntEdge: ipvlan (L2) shares the node VM's MAC address, which the VM's own network accepts; a macvlan interface
+# brings a new MAC the platform's network drops. The free5GC UPF's N3 is ipvlan on the same master (enp1s0).
+apiVersion: "k8s.cni.cncf.io/v1"
+kind: NetworkAttachmentDefinition
+metadata:
+  name: {{ $.Release.Name }}-{{ .name }}
+  labels:
+    app: {{ $.Release.Name }}
+spec:
+  config: '{
+    "cniVersion": "0.3.1",
+    "name": "{{ $.Release.Name }}-{{ .name }}",
+    "type": "ipvlan",
+    "master": "{{ .hostInterface }}",
+    "mode": "{{ default "l2" .mode }}",
+    "ipam": {
+      "type": "static",
+      "addresses": [
+        { "address": "{{ .ipAdd }}/{{ .netmask }}" }
+      ]
+      {{- if .routes }},
+      "routes": {{ toJson .routes }}
+      {{- end }}
+    }
+  }'
+---
+{{- end }}
 {{- if eq .type "macvlan" }}
 apiVersion: "k8s.cni.cncf.io/v1"
 kind: NetworkAttachmentDefinition
