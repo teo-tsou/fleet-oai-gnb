@@ -7,7 +7,7 @@ nfimage:
   # GHCR. Air-gapped sites: the hub mirrors ghcr.io like docker.io, so the same name is served by the hub registry.
   repository: ghcr.io/teo-tsou/oai-gnb-b210
   version: "2026.w43"
-  digest: ""                        # set to the pushed image's sha256 to pin it
+  digest: "sha256:9fce9742b1c78bc58d38247f34f0d6e1d4d8bd67845030a46d35b4cf5987dd31"   # image workflow run 40167379406
 
 radio:
   firmware: baked                   # the image carries the USRP firmware: no download at start
