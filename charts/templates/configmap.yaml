@@ -1,0 +1,14 @@
+# SPDX-License-Identifier: MIT
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Chart.Name }}-configmap
+  labels:
+    app: {{ .Release.Name }}
+    {{- include "oai-gnb.labels" . | nindent 4 }}
+data:
+  {{- /* IntEdge: upstream wrote "config.yaml: |-" and then AsConfig wrote config.yaml again (a duplicate key, kept
+         only by last-wins decoders) */}}
+{{ (.Files.Glob "config.yaml").AsConfig | indent 2 }}

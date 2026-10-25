@@ -1,0 +1,49 @@
+# IntEdge defaults: the OAI gNB driving a USRP B210 (USB), in a user cluster whose worker pool "radio" holds the radio
+# (passed through to that pool's node VM). The 5G core is free5GC (fleet-free5gc-control), reached through the IntEdge
+# `amf` binding, like fleet-ueransim.
+
+nfimage:
+  # OAI 2026.w43 with the B2xx firmware baked in (image/Dockerfile), served by the hub registry: works air-gapped
+  repository: registry.intedge/intedge/oai-gnb-b210
+  version: "2026.w43"
+  digest: ""                        # set to the pushed image's sha256 to pin it
+
+radio:
+  firmware: baked                   # the image carries the USRP firmware: no download at start
+  usbAccess: privileged             # the B210 reconnects when its firmware loads (see charts/values.yaml)
+
+config:
+  gnbName: intedge-gnb
+  radio: b2xx
+  useAdditionalOptions: "-E --continuous-tx --log_config.global_log_options level,nocolor,time"
+  amfHost: amf.upstream.svc.cluster.local   # the IntEdge `amf` binding to the core's AMF
+  tac: 1
+  plmn_list:                         # free5GC's defaults (as fleet-ueransim)
+    - mcc: "208"
+      mnc: "93"
+      mnc_length: 2
+      snssaiList:
+        - sst: 1
+          sd: "0x010203"
+
+# the pool that holds the radio
+nodeSelector:
+  intedge.io/pool: radio
+
+# whole CPUs, requests = limits: a Guaranteed pod, so a node with the static CPU manager gives it cores of its own
+resources:
+  define: true
+  requests:
+    nf:
+      cpu: "3"
+      memory: 3Gi
+    tcpdump:
+      cpu: 100m
+      memory: 128Mi
+  limits:
+    nf:
+      cpu: "3"
+      memory: 3Gi
+    tcpdump:
+      cpu: 100m
+      memory: 128Mi

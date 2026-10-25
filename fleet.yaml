@@ -1,0 +1,8 @@
+defaultNamespace: oai-gnb
+name: oai-gnb
+
+helm:
+  chart: charts
+  releaseName: oai-gnb
+  valuesFiles:
+    - values.yaml

@@ -1,0 +1,19 @@
+fleet-oai-gnb
+
+charts/ is derived from the OAI Helm charts (https://gitlab.eurecom.fr/oai/orchestration/charts,
+oai-5g-ran/oai-gnb 2.4.0, commit 7925f93). The chart is under the MIT License (LICENSE, LICENSES/MIT.txt), except
+charts/config.yaml (the gNB configuration), under OAI's Collaborative Standards Software License v1.0
+(LICENSES/CSSL-v1.0.txt, SPDX LicenseRef-CSSL-1.0). IntEdge changes (2026-10-25):
+  - b2xx mode rendered: the USE_B2XX environment entry was indented one level too deep (a YAML parse error) and
+    carried a boolean value (refused by the Kubernetes API);
+  - the gnb container declared env: twice; the second (TZ, USE_ADDITIONAL_OPTIONS) replaced the first, so
+    OAI_GDBSTACKS and the radio's USE_* variable never reached it: one env block now;
+  - radio.firmware: "baked" (the image carries the USRP firmware) or "download" (upstream behaviour: fetched from
+    the internet at every start);
+  - radio.usbAccess: the b2xx container is privileged so it can open the B210 again after it reconnects;
+  - nfimage.digest; the init containers' images pinned by digest (images.*); imagePullSecrets empty by default;
+  - the ConfigMap declared config.yaml twice (an empty one, then AsConfig's): once now;
+  - config.yaml: sdr_addrs "type=b200" instead of a placeholder serial.
+
+The OAI gNB software in the container image is licensed by OAI under terms with patent clauses (OAI Public License
+v1.1, now CSSL v1.0): review them before any commercial or defense deployment.
