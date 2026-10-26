@@ -5,7 +5,8 @@
 {{- if .enabled }}
 {{- if eq .type "ipvlan" }}
 # IntEdge: ipvlan (L2) shares the node VM's MAC address, which the VM's own network accepts; a macvlan interface
-# brings a new MAC the platform's network drops. The free5GC UPF's N3 is ipvlan on the same master (enp1s0).
+# brings a new MAC the platform's network drops. No hostInterface = the VM's default-route interface: a node VM that
+# holds a passed-through device has its NIC on another PCI slot (enp3s0 instead of enp1s0, 2026-10-26).
 apiVersion: "k8s.cni.cncf.io/v1"
 kind: NetworkAttachmentDefinition
 metadata:
@@ -17,7 +18,9 @@ spec:
     "cniVersion": "0.3.1",
     "name": "{{ $.Release.Name }}-{{ .name }}",
     "type": "ipvlan",
+    {{- if .hostInterface }}
     "master": "{{ .hostInterface }}",
+    {{- end }}
     "mode": "{{ default "l2" .mode }}",
     "ipam": {
       "type": "static",
