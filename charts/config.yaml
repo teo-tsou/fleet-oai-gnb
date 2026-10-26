@@ -158,7 +158,9 @@ RUs:
     max_rxgain: 75
     eNB_instances: [0]
     sf_extension: 0
-    sdr_addrs: "type=b200"   # IntEdge: any B200/B210 on the bus (was a placeholder serial)
+    # IntEdge: any B200/B210 on the bus. In a VM every USB transfer goes through the hypervisor (QEMU's USB passthrough):
+    # 128 receive / send frames (UHD's default is 16) give the gNB slack when it is late, so fewer RX overflows.
+    sdr_addrs: "type=b200,num_recv_frames=128,num_send_frames=128"
 rfsimulator:
   - serveraddr: server
 security:

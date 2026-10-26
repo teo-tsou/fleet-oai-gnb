@@ -50,20 +50,19 @@ nodeSelector:
   intedge.io/pool: radio
 
 # whole CPUs, requests = limits: a Guaranteed pod, so a node with the static CPU manager gives it cores of its own.
-# 4 of the radio VM's 5 vCPUs (the rest for k3s and the node's agents): at 20 MHz the radio and TX threads wanted ~3.3
-# cores and overflowed with 3 (2026-10-26).
+# 3 = the whole radio VM: a 4-core machine (node18-2) hosts a Performance VM of at most 3 vCPUs (2026-10-26).
 resources:
   define: true
   requests:
     nf:
-      cpu: "4"
+      cpu: "3"
       memory: 3Gi
     tcpdump:
       cpu: 100m
       memory: 128Mi
   limits:
     nf:
-      cpu: "4"
+      cpu: "3"
       memory: 3Gi
     tcpdump:
       cpu: 100m
