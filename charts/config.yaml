@@ -158,9 +158,9 @@ RUs:
     max_rxgain: 75
     eNB_instances: [0]
     sf_extension: 0
-    # IntEdge: any B200/B210 on the bus. In a VM every USB transfer goes through the hypervisor (QEMU's USB passthrough):
-    # 128 receive / send frames (UHD's default is 16) give the gNB slack when it is late, so fewer RX overflows.
-    sdr_addrs: "type=b200,num_recv_frames=128,num_send_frames=128"
+    # IntEdge: any B200/B210 on the bus. Single-device USB passthrough test (2026-10-26): every USB transfer goes through
+    # QEMU, so UHD's largest frames (16360 bytes, the B200 maximum; default 8176) and its most buffers (1024; default 16).
+    sdr_addrs: "type=b200,num_recv_frames=1024,recv_frame_size=16360,num_send_frames=1024,send_frame_size=16360"
 rfsimulator:
   - serveraddr: server
 security:
