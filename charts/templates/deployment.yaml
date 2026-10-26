@@ -19,12 +19,15 @@ spec:
       labels:
         {{- include "oai-gnb.selectorLabels" . | nindent 8 }}
         app: {{ .Release.Name }}
+      annotations:
+        # IntEdge: a change of the gNB config (charts/config.yaml) rolls the pod; without it Fleet updated the ConfigMap
+        # and the running gNB kept its old cell
+        checksum/config: {{ .Files.Get "config.yaml" | sha256sum }}
     {{- if and .Values.multus.enabled .Values.multus.interfaces }}
       {{- $count := include "oai-gnb.countDefaultRouteInterfaces" . | int }}
       {{- if gt $count 1 }}
       {{- fail (printf "(%d) enabled interfaces are using defaultRoute; only one is allowed." $count) }}
       {{- end }}
-      annotations:
         k8s.v1.cni.cncf.io/networks: |-
           [
           {{- $first := true }}

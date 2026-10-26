@@ -24,25 +24,28 @@ gNBs:
       - physCellId: 0
         #  downlinkConfigCommon
         #frequencyInfoDL
-        # this is 3300.60 MHz + 53*12*30e-3 MHz = 3319.68
+        # 20 MHz (51 PRB at 30 kHz): the radio VM drains 23.04 MS/s from the B210 where 40 MHz (106 PRB, 46.08 MS/s) ran
+        # into receive overflows (2026-10-25). The layout is OAI's CI config gnb.sa.band78.51prb.usrpb200.conf (SSB 640704,
+        # point A 639996, CORESET#0 index 12) moved down 202 sync raster steps, so the SSB stays at 3319.68 MHz as before.
+        # this is 3309.06 MHz + 10.62 MHz = 3319.68 MHz (GSCN-aligned)
         absoluteFrequencySSB: 621312
-        # this is 3300.60 MHz
-        dl_absoluteFrequencyPointA: 620040
+        # this is 3309.06 MHz
+        dl_absoluteFrequencyPointA: 620604
         #scs-SpecificCarrierList
         dl_offstToCarrier: 0
         # subcarrierSpacing
         # 0=kHz15, 1=kHz30, 2=kHz60, 3=kHz120
         dl_subcarrierSpacing: 1
-        dl_carrierBandwidth: 106
+        dl_carrierBandwidth: 51
         #initialDownlinkBWP
         #genericParameters
-        # this is RBstart=0,L=106 (275*(L-1))+RBstart
-        initialDLBWPlocationAndBandwidth: 28875
+        # this is RBstart=0,L=51 (275*(L-1))+RBstart
+        initialDLBWPlocationAndBandwidth: 13750
         # subcarrierSpacing
         # 0=kHz15, 1=kHz30, 2=kHz60, 3=kHz120
         initialDLBWPsubcarrierSpacing: 1
         #pdcch-ConfigCommon
-        initialDLBWPcontrolResourceSetZero: 11
+        initialDLBWPcontrolResourceSetZero: 12
         initialDLBWPsearchSpaceZero: 0
         #uplinkConfigCommon
         #frequencyInfoUL
@@ -52,11 +55,11 @@ gNBs:
         # subcarrierSpacing
         # 0=kHz15, 1=kHz30, 2=kHz60, 3=kHz120
         ul_subcarrierSpacing: 1
-        ul_carrierBandwidth: 106
+        ul_carrierBandwidth: 51
         pMax: 20
         #initialUplinkBWP
         #genericParameters
-        initialULBWPlocationAndBandwidth: 28875
+        initialULBWPlocationAndBandwidth: 13750
         # subcarrierSpacing
         # 0=kHz15, 1=kHz30, 2=kHz60, 3=kHz120
         initialULBWPsubcarrierSpacing: 1
