@@ -57,14 +57,14 @@ resources:
   requests:
     nf:
       cpu: "5"
-      memory: 3Gi
+      memory: 2560Mi
     tcpdump:
       cpu: 100m
       memory: 128Mi
   limits:
     nf:
       cpu: "5"
-      memory: 3Gi
+      memory: 2560Mi
     tcpdump:
       cpu: 100m
       memory: 128Mi
