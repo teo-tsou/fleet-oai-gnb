@@ -50,20 +50,21 @@ nodeSelector:
   intedge.io/pool: radio
 
 # whole CPUs, requests = limits: a Guaranteed pod, so a node with the static CPU manager gives it cores of its own.
-# 3 = the whole 3-vCPU Performance radio VM (node18-2's ceiling). The 6-vCPU Standard test (2026-10-26) showed the
-# limit was QEMU's USB passthrough (~25-30 MB/s), not the CPU: the radio VM holds the whole USB controller again.
+# 2.8 of the 3-vCPU Performance radio VM (node18-2's ceiling): the cluster's system pods need a little room on the radio
+# node, or one of them (CoreDNS, rescheduled there, system-cluster-critical) preempts the gNB (2026-10-26). The 6-vCPU
+# Standard test showed the 20 MHz limit was QEMU's USB passthrough, not the CPU: the radio VM holds the whole controller.
 resources:
   define: true
   requests:
     nf:
-      cpu: "3"
+      cpu: "2800m"
       memory: 3Gi
     tcpdump:
       cpu: 100m
       memory: 128Mi
   limits:
     nf:
-      cpu: "3"
+      cpu: "2800m"
       memory: 3Gi
     tcpdump:
       cpu: 100m
